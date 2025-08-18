@@ -1,0 +1,59 @@
+ <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crop Recommendation</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    .card { max-width: 720px; margin: auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    label { display:block; margin-top: 0.75rem; }
+    input { width:100%; padding:0.5rem; border-radius:8px; border:1px solid #ccc; }
+    button { margin-top:1rem; padding:0.6rem 1rem; border:none; border-radius:8px; background:#2563eb; color:#fff; cursor:pointer; }
+    .result { margin-top:1rem; padding:0.75rem; background:#f1f5f9; border-radius:8px; white-space: pre-line; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🌾 Crop Recommendation (AI)</h1>
+    <p>Fill in the soil & climate parameters, then click Predict.</p>
+
+    <label>Nitrogen (N) <input id="N" type="number" value="50"></label>
+    <label>Phosphorus (P) <input id="P" type="number" value="50"></label>
+    <label>Potassium (K) <input id="K" type="number" value="50"></label>
+    <label>Temperature (°C) <input id="temperature" type="number" value="25" step="0.1"></label>
+    <label>Humidity (%) <input id="humidity" type="number" value="60" step="0.1"></label>
+    <label>pH <input id="ph" type="number" value="6.5" step="0.1"></label>
+    <label>Rainfall (mm) <input id="rainfall" type="number" value="100" step="0.1"></label>
+    <button onclick="predict()">Predict</button>
+    <div id="output" class="result"></div>
+  </div>
+
+  <script>
+    async function predict() {
+      const payload = {
+        N: parseFloat(document.getElementById('N').value),
+        P: parseFloat(document.getElementById('P').value),
+        K: parseFloat(document.getElementById('K').value),
+        temperature: parseFloat(document.getElementById('temperature').value),
+        humidity: parseFloat(document.getElementById('humidity').value),
+        ph: parseFloat(document.getElementById('ph').value),
+        rainfall: parseFloat(document.getElementById('rainfall').value),
+      };
+      const resp = await fetch('http://127.0.0.1:8000/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await resp.json();
+      const top3 = data.top3.map(t => `${t.crop} (${(t.probability*100).toFixed(1)}%)`).join('\n');
+      document.getElementById('output').innerText =
+        `Recommended Crop: ${data.predicted_crop}\n\nTop 3:\n${top3}`;
+    }
+  </script>
+</body>
+</html> 
+
+
+
+
