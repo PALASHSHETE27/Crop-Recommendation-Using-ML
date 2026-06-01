@@ -45,25 +45,6 @@ The system analyzes key parameters such as Nitrogen (N), Phosphorus (P), Potassi
 
 ---
 
-## 📂 Project Structure
-
-Crop-Recommendation-Using-ML/
-│
-├── frontend/
-│   ├── index.html
-│   └── style.css
-│
-├── api.py
-├── streamlit_app.py
-├── train.py
-├── requirements.txt
-├── Crop_recommendation.csv
-├── crop_recommendation_model.joblib
-├── label_encoder.joblib
-└── README.md
-
----
-
 ## 📊 Dataset Features
 
 The model uses the following input parameters:
